@@ -6,6 +6,7 @@ const FIELDS = {
     NAME: 'name',
     ROOM: 'room',
 }
+
 const Main = () => {
 
     const { NAME, ROOM } = FIELDS;
@@ -14,7 +15,16 @@ const Main = () => {
 
     const handleChange = ({ target: { value, name } }) => {
         setValues({ ...values, [name]: value });
+    };
+
+    const heandleClick = (e) => {
+        const isDisabled = Object.values(values).some((value) => !value);
+        console.log(isDisabled)
+
+        if(isDisabled) e.preventDefault();
     }
+
+    
 
     return (
         <div className={s.wrap}>
@@ -46,7 +56,10 @@ const Main = () => {
                             onChange={handleChange}
                         />
                     </div>
-                    <Link to={`/chat?name=${values[NAME]}&room=${values[ROOM]}`}>
+                    <Link 
+                        onClick={heandleClick}
+                        className={s.group}
+                        to={`/chat?name=${values[NAME]}&room=${values[ROOM]}`}>
                         <button type="submit" className={s.button}>
                             Sign In
                         </button>
