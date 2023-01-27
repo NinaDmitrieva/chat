@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
         const { user } = addUser({name, room })
 
         socket.emit('message', {
-            data: {user: {name: 'Admin'}, message: `Hey, ${user.name}`}
+            data: {user: {name: 'Admin'}, message: `Hey, ${user.name} `}
         })
 
         socket.broadcast.to(user.room).emit('message', {

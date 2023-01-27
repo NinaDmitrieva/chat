@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import io from 'socket.io-client';
+import EmojiPicker from "emoji-picker-react";
+
 import styles from '../styles/Chat.module.css';
+import icon from '../images/sun.svg'
 
 const socket = io.connect('http://localhost:5000');
 
 const Chat = () => {
-    const [state, setState] = useState([]);
     const { search } = useLocation();
-    const [params, setParams] = useState(null)
+    const [state, setState] = useState([]);
+    const [params, setParams] = useState({room:"", user:""});
+    const [message, setMessage] = useState("");
+    const [isOpen, setOpen] = useState(false)
 
     useEffect(() => {
         const searchParams = Object.fromEntries(new URLSearchParams(search))
@@ -18,39 +23,51 @@ const Chat = () => {
 
     useEffect(() => {
         socket.on('message', ({ data }) => {
-            setState((state) => ([...state, data]));
+            setState((state) => [...state, data]);
         });
     }, []);
-    console.log(state);
 
-    const leftRoom = () => { }
+    const leftRoom = () => { };
+    const handleChange = ({ target: { value } }) => setMessage(value);
+    const handleSubmit = () => {};
+    const onEmojiClick = ({emoji}) => setMessage(`${message} ${emoji}`)
 
     return (
         <div className={styles.wrap}>
             <div className={styles.header}>
                 <div className={styles.title}>{params.room}</div>
                 <div className={styles.users}>0 users in this room</div>
-                <button className={styles.left}
-                    onClick={leftRoom}
-                >
+                <button className={styles.left} onClick={leftRoom}>
                     left the room
                 </button>
             </div>
             <div className={styles.messages}>
-                {state.map(({ messages }) => <span></span>)}
+                {state.map(({ message }, i) => <span key={i}>{message}</span>)}
             </div>
             <form className={styles.form}>
                 <div className={styles.input}>
                     <input
-                        className={s.input}
+                        className={styles.input}
                         placeholder="message"
                         type='text'
                         name="message"
-                        value={values[NAME]}
+                        value={message}
                         autoComplete="off"
                         required
                         onChange={handleChange}
                     />
+                </div>
+                <div className={styles.emoji}>
+                    <img src={icon} alt="emoji" onClick={ () => setOpen(!isOpen)}/>
+
+                    {isOpen && (
+                    <div className={styles.emojies}>
+                        <EmojiPicker onEmojiClick={onEmojiClick} />
+                    </div>
+                    )}
+                </div>
+                <div className={styles.button}>
+                    <input type="submit" value="Send a message" onSubmit={handleSubmit}/>
                 </div>
             </form>
         </div>
