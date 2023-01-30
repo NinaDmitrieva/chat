@@ -14,7 +14,8 @@ const Chat = () => {
     const [state, setState] = useState([]);
     const [params, setParams] = useState({ room: "", user: "" });
     const [message, setMessage] = useState("");
-    const [isOpen, setOpen] = useState(false)
+    const [isOpen, setOpen] = useState(false);
+    const [users, setUser] = useState(0);
 
     console.log(params)
 
@@ -27,6 +28,12 @@ const Chat = () => {
     useEffect(() => {
         socket.on('message', ({ data }) => {
             setState((state) => [...state, data]);
+        });
+    }, []);
+
+    useEffect(() => {
+        socket.on('joinRoom', ({ data: {users}}) => {
+            setUser(users.length);
         });
     }, []);
 
@@ -46,7 +53,7 @@ const Chat = () => {
         <div className={styles.wrap}>
             <div className={styles.header}>
                 <div className={styles.title}>{params.room}</div>
-                <div className={styles.users}>0 users in this room</div>
+                <div className={styles.users}>{users} users in this room</div>
                 <button className={styles.left} onClick={leftRoom}>
                     left the room
                 </button>
