@@ -20,10 +20,19 @@ const addUser = (user) => {
 
     const currentUser = isExist || user;
 
-    return { isExist: !!isExist, user: currentUser}
+    return { isExist: !!isExist, user: currentUser }
 };
 
 const getRoomUsers = (room) => users.filter((u) => u.room === room)
 
+const removeUser = (user) => {
+    const found = findUser(user);
+    if (findUser) {
+        users = users.filter(({ room, name }) => {
+            room === found.room && name !== found.name
+        });
+    }
+    return found;
+};
 
-module.exports = { addUser, findUser, getRoomUsers };
+module.exports = { addUser, findUser, getRoomUsers, removeUser };
