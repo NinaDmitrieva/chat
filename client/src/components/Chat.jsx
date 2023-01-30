@@ -12,7 +12,7 @@ const socket = io.connect('http://localhost:5000');
 const Chat = () => {
     const { search } = useLocation();
     const [state, setState] = useState([]);
-    const [params, setParams] = useState({room:"", user:""});
+    const [params, setParams] = useState({ room: "", user: "" });
     const [message, setMessage] = useState("");
     const [isOpen, setOpen] = useState(false)
 
@@ -35,12 +35,12 @@ const Chat = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if(!message) return;
+        if (!message) return;
 
-        socket.emit('sendMessage', {message, params });
+        socket.emit('sendMessage', { message, params });
         setMessage('');
     };
-    const onEmojiClick = ({emoji}) => setMessage(`${message} ${emoji}`)
+    const onEmojiClick = ({ emoji }) => setMessage(`${message} ${emoji}`)
 
     return (
         <div className={styles.wrap}>
@@ -68,16 +68,16 @@ const Chat = () => {
                     />
                 </div>
                 <div className={styles.emoji}>
-                    <img src={icon} alt="emoji" onClick={ () => setOpen(!isOpen)}/>
+                    <img src={icon} alt="emoji" onClick={() => setOpen(!isOpen)} />
 
                     {isOpen && (
-                    <div className={styles.emojies}>
-                        <EmojiPicker onEmojiClick={onEmojiClick} />
-                    </div>
+                        <div className={styles.emojies}>
+                            <EmojiPicker onEmojiClick={onEmojiClick} />
+                        </div>
                     )}
                 </div>
                 <div className={styles.button}>
-                    <input type="submit" value="Send a message" onSubmit={handleSubmit}/>
+                    <input type="submit" value="Send a message" onSubmit={handleSubmit} />
                 </div>
             </form>
         </div>

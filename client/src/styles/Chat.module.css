@@ -81,6 +81,15 @@
   font-size: 18px;
   background: rgb(35, 35, 35);
   padding: 32px;
+  overflow-y: scroll;
+}
+.messages::-webkit-scrollbar {
+  background-color:#63636a82;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color:#0d49d7;
+  border-radius: 10px;
 }
 
 .emoji {
