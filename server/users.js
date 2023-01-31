@@ -30,8 +30,8 @@ const removeUser = (user) => {
 
     if (found) {
         users = users.filter(
-            ({ room, name }) => {room === found.room && name !== found.name
-        });
+            ({ room, name }) => room === found.room && name !== found.name
+        );
     }
     
     return found;
