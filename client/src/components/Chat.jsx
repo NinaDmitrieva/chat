@@ -16,7 +16,7 @@ const Chat = () => {
     const [params, setParams] = useState({ room: "", user: "" });
     const [message, setMessage] = useState("");
     const [isOpen, setOpen] = useState(false);
-    const [users, setUser] = useState(0);
+    const [users, setUsers] = useState(0);
 
     useEffect(() => {
         const searchParams = Object.fromEntries(new URLSearchParams(search))
@@ -31,8 +31,8 @@ const Chat = () => {
     }, []);
 
     useEffect(() => {
-        socket.on('joinRoom', ({ data: { users } }) => {
-            setUser(users.length);
+        socket.on("room", ({ data: { users } }) => {
+            setUsers(users.length);
         });
     }, []);
 
@@ -41,12 +41,14 @@ const Chat = () => {
         navigate('/');
     };
     const handleChange = ({ target: { value } }) => setMessage(value);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (!message) return;
 
         socket.emit('sendMessage', { message, params });
+
         setMessage('');
     };
     const onEmojiClick = ({ emoji }) => setMessage(`${message} ${emoji}`)
@@ -60,9 +62,11 @@ const Chat = () => {
                     left the room
                 </button>
             </div>
+
             <div className={styles.messages}>
                 <Messages messages={state} name={params.name} />
             </div>
+            
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles.input}>
                     <input
